@@ -21,7 +21,7 @@ const ClickMe = ({ addDrinks }) => {
             }}
             className="shrink active:scale-95 transition-transform duration-100"
         >
-            <img draggable="false" src={image} />
+            <img draggable="false" className="h-[800px]" src={image} />
         </button>
     );
 };
