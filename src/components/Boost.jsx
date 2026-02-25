@@ -8,7 +8,7 @@ const Description = ({ upgrade, posRef }) => {
                 &nbsp;One {upgrade.name} produces {upgrade.cps} dps.
             </p>
         </div>,
-        document.body
+        document.body,
     );
 };
 
@@ -26,13 +26,24 @@ const Boost = ({ upgrade, onClick }) => {
         }
     };
 
+    const handleMouseEnter = (e) => {
+        setRenderDescription(true);
+        // position will be set immediately on first mousemove,
+        // but you can also seed it here:
+        setTimeout(() => {
+            if (posRef.current) {
+                posRef.current.style.left = e.clientX - 12 + "px";
+                posRef.current.style.top = e.clientY + 12 + "px";
+            }
+        }, 0); // after portal mounts
+    };
     // component
     return (
         <div className="flex flex-row *:p-2">
             <button
                 className={`border-2 hover:bg-purple-200 text-4xl`}
                 onClick={onClick}
-                onMouseEnter={() => setRenderDescription(true)}
+                onMouseEnter={handleMouseEnter}
                 onMouseLeave={() =>
                     setTimeout(() => setRenderDescription(false), 10)
                 }

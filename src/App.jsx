@@ -7,46 +7,73 @@ import { playSound } from "react-sounds";
 
 const TICKRATE = 1000 / 24;
 const CLICK = "./click.mp3";
+const upgrades = [
+    {
+        name: "Part Timer",
+        cost: 10,
+        description:
+            "This teen is on the honor roll, and will use this in their common app essay! Hire them! ",
+        count: 0,
+        cps: 1,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Cashier",
+        cost: 25,
+        description: "This person is an adult that can work full time!!. ",
+        count: 0,
+        cps: 4,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Newspaper Ads",
+        cost: 100,
+        description: "This will definitely drum up some business. ",
+        count: 0,
+        cps: 16,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Teaman",
+        cost: 250,
+        description:
+            "Their sign-spinning draws all eyes, and inspires thirstiness in consumers. ",
+        count: 0,
+        cps: 48,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Pay Micro-Influencers",
+        cost: 500,
+        description:
+            "@InAlliesTummie has HUNDREDS in her following, and will surely drive some foot traffic! ",
+        count: 0,
+        cps: 96,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Radio Ads",
+        cost: 2500,
+        description:
+            "Old people love tea! Some air time will lead to tea time. ",
+        count: 0,
+        cps: 96 * 5,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+    {
+        name: "Microwave Ads",
+        cost: 10000,
+        description:
+            "They'll regret that smart microwave once they see this ad. But, now they know where to get a real hot cup of tea! ",
+        count: 0,
+        cps: 96 * 5 * 4,
+        onClick: (upgrade) => handlePurchase(upgrade),
+    },
+];
 function App() {
     // hooks and props
     const [drinks, setDrinks] = useState(0);
     const [tick, setTick] = useState(0);
-    const upgrades = [
-        {
-            name: "Part Timer",
-            cost: 10,
-            description:
-                "This teen is on the honor roll, and will use this in their common app essay! Hire them! ",
-            count: 0,
-            cps: 1,
-            onClick: (upgrade) => handlePurchase(upgrade),
-        },
-        {
-            name: "Cashier",
-            cost: 25,
-            description: "This person is an adult that can work full time!!. ",
-            count: 0,
-            cps: 4,
-            onClick: (upgrade) => handlePurchase(upgrade),
-        },
-        {
-            name: "Newspaper Ads",
-            cost: 100,
-            description: "This will definitely drum up some business. ",
-            count: 0,
-            cps: 16,
-            onClick: (upgrade) => handlePurchase(upgrade),
-        },
-        {
-            name: "Teaman",
-            cost: 250,
-            description:
-                "There sign-spinning draws all eyes, and inspires thirstiness in consumers. ",
-            count: 0,
-            cps: 48,
-            onClick: (upgrade) => handlePurchase(upgrade),
-        },
-    ];
     const [upgradesList, setUpgradesList] = useState(upgrades);
     const cps = upgradesList.reduce((acc, cv) => acc + cv.cps * cv.count, 0);
 
@@ -60,7 +87,7 @@ function App() {
                     // update drinks properly
                     setDrinks(
                         (prev) =>
-                            prev + upgradesList[i].count * upgradesList[i].cps
+                            prev + upgradesList[i].count * upgradesList[i].cps,
                     );
                 }
             }
@@ -108,7 +135,7 @@ function App() {
                               count: u.count + 1,
                               cost: Math.floor(u.cost ** 1.05),
                           }
-                        : u
+                        : u,
                 );
             });
         }
