@@ -37,6 +37,7 @@ function randomOddInRange(min, max) {
 const ClickMe = ({ addDrinks }) => {
     // props
     const [image, setImage] = useState(() => images[randomOddInRange(1, 19)]);
+    const audio = new Audio("./click.mp3");
 
     // helper function
     const updateDrink = () => {
@@ -53,6 +54,7 @@ const ClickMe = ({ addDrinks }) => {
         <button
             type="button"
             onClick={() => {
+                audio.play();
                 addDrinks();
                 updateDrink();
             }}
