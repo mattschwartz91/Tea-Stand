@@ -56,7 +56,7 @@ const ClickMe = ({ addDrinks }) => {
                 addDrinks();
                 updateDrink();
             }}
-            className="shrink active:scale-95 transition-transform duration-100"
+            className="shrink active:scale-95 transition-transform duration-100 p-2 m-2"
         >
             <img
                 draggable="false"

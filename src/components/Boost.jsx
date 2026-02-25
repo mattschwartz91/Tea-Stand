@@ -1,11 +1,25 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-const Description = ({ upgrade, posRef }) => {
+
+const Description = ({ upgrade, pos }) => {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            const w = 0;
+            ref.current.style.left = pos.x - w - 12 + "px";
+            ref.current.style.top = pos.y + 12 + "px";
+        }
+    }, [pos]); // re-runs every time pos changes
+
     return createPortal(
-        <div className="absolute z-10 border-2 bg-amber-200 flex" ref={posRef}>
+        <div
+            ref={ref}
+            className="fixed z-50 border-2 bg-amber-200 p-1 pointer-events-none text-sm"
+        >
             <p>{upgrade.description}</p>
             <p>
-                &nbsp;One {upgrade.name} produces {upgrade.cps} dps.
+                One {upgrade.name} produces {upgrade.cps} dps.
             </p>
         </div>,
         document.body,
@@ -13,40 +27,20 @@ const Description = ({ upgrade, posRef }) => {
 };
 
 const Boost = ({ upgrade, onClick }) => {
-    // props and hooks
-    const [renderDescription, setRenderDescription] = useState(false);
-    const posRef = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [pos, setPos] = useState({ x: 0, y: 0 }); // state not ref so it triggers re-render
 
-    // handle mouse movement with a ref
-    const handleMouseMove = (e) => {
-        if (posRef.current) {
-            posRef.current.style.left = e.clientX + 12 + "px";
-            posRef.current.style.top = e.clientY + 12 + "px";
-            console.log(`x: ${e.clientX} y: ${e.clientY}`);
-        }
-    };
+    const handleMouseMove = (e) => setPos({ x: e.clientX, y: e.clientY });
+    const handleMouseEnter = () => setIsOpen(true);
+    const handleMouseLeave = () => setIsOpen(false);
 
-    const handleMouseEnter = (e) => {
-        setRenderDescription(true);
-        // position will be set immediately on first mousemove,
-        // but you can also seed it here:
-        setTimeout(() => {
-            if (posRef.current) {
-                posRef.current.style.left = e.clientX - 12 + "px";
-                posRef.current.style.top = e.clientY + 12 + "px";
-            }
-        }, 0); // after portal mounts
-    };
-    // component
     return (
         <div className="flex flex-row *:p-2">
             <button
-                className={`border-2 hover:bg-purple-200 text-4xl`}
+                className="border-2 hover:bg-purple-200 text-4xl"
                 onClick={onClick}
                 onMouseEnter={handleMouseEnter}
-                onMouseLeave={() =>
-                    setTimeout(() => setRenderDescription(false), 10)
-                }
+                onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
             >
                 {upgrade.name}
@@ -54,10 +48,11 @@ const Boost = ({ upgrade, onClick }) => {
             <p>Cost: {upgrade.cost}</p>
             <p>Count: {upgrade.count}</p>
             <p>Producing: {upgrade.count * upgrade.cps}</p>
-            {renderDescription && (
-                <Description upgrade={upgrade} posRef={posRef} />
+            {isOpen && pos.x !== 0 && pos.y !== 0 && (
+                <Description upgrade={upgrade} pos={pos} />
             )}
         </div>
     );
 };
+
 export default Boost;
