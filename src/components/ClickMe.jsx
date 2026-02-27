@@ -24,45 +24,39 @@ const images = [
 ];
 
 function randomOddInRange(min, max) {
-    // Make sure min is odd
     if (min % 2 === 0) min++;
-    // Make sure max is odd
     if (max % 2 === 0) max--;
-
-    // Pick a random odd number between min and max
     const oddCount = Math.floor((max - min) / 2) + 1;
     return min + Math.floor(Math.random() * oddCount) * 2;
 }
+const audio = new Audio("./click.mp3");
 
 const ClickMe = ({ addDrinks }) => {
-    // props
     const [image, setImage] = useState(() => images[randomOddInRange(1, 19)]);
-    const audio = new Audio("./click.mp3");
 
-    // helper function
     const updateDrink = () => {
         const i = images.indexOf(image);
         if (i > 0) {
-            const nextImage = i - 1;
-            setImage(images[nextImage]);
+            setImage(images[i - 1]);
         } else {
             setImage(images[18]);
         }
     };
-    // component
+
     return (
         <button
+            className="mx-auto"
             type="button"
             onClick={() => {
+                audio.currentTime = 0;
                 audio.play();
                 addDrinks();
                 updateDrink();
             }}
-            className="shrink active:scale-95 transition-transform duration-100 p-2 m-2"
         >
             <img
                 draggable="false"
-                className=" p-2 m-2 w-[256px] h-[256px] [image-rendering:pixelated]"
+                className="ml-12  p-2 h-64 w-64 [image-rendering:pixelated] active:scale-98"
                 src={image}
             />
         </button>
